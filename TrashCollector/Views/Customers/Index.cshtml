@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<TrashCollector.Models.Customer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home: Customer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Customer Home</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" >Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -31,12 +32,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.ZipCode)
             </th>
+            <!--
             <th>
                 @Html.DisplayNameFor(model => model.BalanceOwed)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdentityUser)
             </th>
+            -->
             <th></th>
         </tr>
     </thead>
@@ -61,17 +64,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ZipCode)
             </td>
+            <!--
             <td>
                 @Html.DisplayFor(modelItem => item.BalanceOwed)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdentityUser.Id)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
-            </td>
+            -->
+        <td>
+            <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
+            <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a> |
+            <a asp-controller="CustomerPickups" asp-action="Index" asp-route-id="@item.CustomerId">Schedule Pickup</a>
+        </td>
         </tr>
 }
     </tbody>

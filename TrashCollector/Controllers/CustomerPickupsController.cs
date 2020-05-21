@@ -10,23 +10,23 @@ using TrashCollector.Models;
 
 namespace TrashCollector.Controllers
 {
-    public class TrashPickupsController : Controller
+    public class CustomerPickupsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TrashPickupsController(ApplicationDbContext context)
+        public CustomerPickupsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: TrashPickups
+        // GET: CustomerPickups
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TrashPickups.Include(t => t.Customer).Include(t => t.Employee);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: TrashPickups/Details/5
+        // GET: CustomerPickups/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +46,7 @@ namespace TrashCollector.Controllers
             return View(trashPickup);
         }
 
-        // GET: TrashPickups/Create
+        // GET: CustomerPickups/Create
         public IActionResult Create()
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
@@ -54,7 +54,7 @@ namespace TrashCollector.Controllers
             return View();
         }
 
-        // POST: TrashPickups/Create
+        // POST: CustomerPickups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -72,7 +72,7 @@ namespace TrashCollector.Controllers
             return View(trashPickup);
         }
 
-        // GET: TrashPickups/Edit/5
+        // GET: CustomerPickups/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +90,7 @@ namespace TrashCollector.Controllers
             return View(trashPickup);
         }
 
-        // POST: TrashPickups/Edit/5
+        // POST: CustomerPickups/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -127,7 +127,7 @@ namespace TrashCollector.Controllers
             return View(trashPickup);
         }
 
-        // GET: TrashPickups/Delete/5
+        // GET: CustomerPickups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +147,7 @@ namespace TrashCollector.Controllers
             return View(trashPickup);
         }
 
-        // POST: TrashPickups/Delete/5
+        // POST: CustomerPickups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
