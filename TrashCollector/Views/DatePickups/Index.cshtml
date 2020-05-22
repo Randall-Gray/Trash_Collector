@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TrashCollector.Models.DatePickup>
+
+@{
+    ViewData["Title"] = "Customer: One-time Pickups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Customer One-time Pickups</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <!--
+            <th>
+                @Html.DisplayNameFor(model => model.Completed)
+            </th>
+            -->
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <!--
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            -->
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <!--
+            <td>
+                @Html.DisplayFor(modelItem => item.Completed)
+            </td>
+            -->
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <!--
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.CustomerId)
+            </td>
+            -->
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DatePickupId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.DatePickupId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

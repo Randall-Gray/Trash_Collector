@@ -15,15 +15,12 @@ namespace TrashCollector.Models
         public bool Completed { get; set; }
 
         [ForeignKey("WeekDay")]
+        [Display(Name = "Weekly Pickup Day")]
         public int WeekDayId { get; set; }
         public WeekDay WeekDay{ get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
-
-        [ForeignKey("Employee")]
-        public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
     }
 }

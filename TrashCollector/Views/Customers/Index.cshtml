@@ -6,11 +6,13 @@
 }
 
 <h1>Customer Home</h1>
-<!--
+
 <p>
-    <a asp-action="Create" >Create New</a>
+    <a asp-action="Index" asp-controller="WeeklyPickups">Schedule Weekly Pickup</a>  |
+    <a asp-action="Index" asp-controller="DatePickups">Schedule One-time Pickup</a>  |
+    <a asp-action="Index" asp-controller="SuspendPickups">Suspend Pickups</a>
 </p>
--->
+
 <table class="table">
     <thead>
         <tr>
@@ -75,8 +77,7 @@
         <td>
             <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
             <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a> |
-            <a asp-controller="CustomerPickups" asp-action="Index" asp-route-id="@item.CustomerId">Schedule Pickup</a>
+            <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
         </td>
         </tr>
 }

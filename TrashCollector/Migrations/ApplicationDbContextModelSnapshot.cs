@@ -48,15 +48,15 @@ namespace TrashCollector.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d098a0fe-170d-49b5-afac-d42804ccca8f",
-                            ConcurrencyStamp = "f5b9f92a-e6a8-4d47-bb92-c029d89fb41e",
+                            Id = "32eb301e-e739-41be-bb0e-a04fab04300d",
+                            ConcurrencyStamp = "29320a17-f997-42cf-ad2e-bf7901877014",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "66e0df3c-5b5a-4fb4-9acd-3854eb6d357e",
-                            ConcurrencyStamp = "6c3c189c-b473-4b4e-aee0-06ef112297fc",
+                            Id = "1562f762-d587-4098-ace7-788610efcb6a",
+                            ConcurrencyStamp = "7edc7a1b-2a35-4047-9baa-228b4aeb6ff9",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -285,14 +285,14 @@ namespace TrashCollector.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int?>("TrashPickupViewModelId")
                         .HasColumnType("int");
 
                     b.HasKey("DatePickupId");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("TrashPickupViewModelId");
 
                     b.ToTable("DatePickups");
                 });
@@ -345,22 +345,39 @@ namespace TrashCollector.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TrashPickupViewModelId")
+                        .HasColumnType("int");
+
                     b.HasKey("SuspendPickupId");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("TrashPickupViewModelId");
 
                     b.ToTable("SuspendPickups");
+                });
+
+            modelBuilder.Entity("TrashCollector.Models.TrashPickupViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("VMWeeklyPickupWeeklyPickupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VMWeeklyPickupWeeklyPickupId");
+
+                    b.ToTable("TrashPickupViewModel");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.WeekDay", b =>
@@ -378,6 +395,11 @@ namespace TrashCollector.Migrations
                     b.ToTable("WeekDays");
 
                     b.HasData(
+                        new
+                        {
+                            WeekDayId = -1,
+                            Day = ""
+                        },
                         new
                         {
                             WeekDayId = 1,
@@ -428,17 +450,12 @@ namespace TrashCollector.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("WeekDayId")
                         .HasColumnType("int");
 
                     b.HasKey("WeeklyPickupId");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("WeekDayId");
 
@@ -511,11 +528,9 @@ namespace TrashCollector.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrashCollector.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("TrashCollector.Models.TrashPickupViewModel", null)
+                        .WithMany("VMDatePickups")
+                        .HasForeignKey("TrashPickupViewModelId");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.Employee", b =>
@@ -533,11 +548,16 @@ namespace TrashCollector.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrashCollector.Models.Employee", "Employee")
+                    b.HasOne("TrashCollector.Models.TrashPickupViewModel", null)
+                        .WithMany("VMSuspendPickups")
+                        .HasForeignKey("TrashPickupViewModelId");
+                });
+
+            modelBuilder.Entity("TrashCollector.Models.TrashPickupViewModel", b =>
+                {
+                    b.HasOne("TrashCollector.Models.WeeklyPickup", "VMWeeklyPickup")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VMWeeklyPickupWeeklyPickupId");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.WeeklyPickup", b =>
@@ -545,12 +565,6 @@ namespace TrashCollector.Migrations
                     b.HasOne("TrashCollector.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TrashCollector.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

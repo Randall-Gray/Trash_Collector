@@ -43,6 +43,7 @@ namespace TrashCollector.Data
 
             builder.Entity<WeekDay>()
                 .HasData(
+                    new WeekDay { WeekDayId = -1, Day = "" },
                     new WeekDay { WeekDayId = 1, Day = "Monday" },
                     new WeekDay { WeekDayId = 2, Day = "Tuesday" },
                     new WeekDay { WeekDayId = 3, Day = "Wednesday" },
@@ -52,5 +53,7 @@ namespace TrashCollector.Data
                     new WeekDay { WeekDayId = 7, Day = "Sunday" }
                 );
         }
+
+        public DbSet<TrashCollector.Models.TrashPickupViewModel> TrashPickupViewModel { get; set; }
     }
 }

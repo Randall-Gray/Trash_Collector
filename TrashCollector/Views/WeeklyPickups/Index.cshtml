@@ -1,0 +1,56 @@
+﻿@model IEnumerable<TrashCollector.Models.WeeklyPickup>
+
+@{
+    ViewData["Title"] = "Customer: Weekly Pickup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Customer Weekly Pickup</h1>
+<!--
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+-->
+<table class="table">
+    <thead>
+        <tr>
+            <!--
+            <th>
+                @Html.DisplayNameFor(model => model.Completed)
+            </th>
+            -->
+            <th>
+                @Html.DisplayNameFor(model => model.WeekDay)
+            </th>
+            <!--
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            -->
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <!--
+            <td>
+                @Html.DisplayFor(modelItem => item.Completed)
+            </td>
+            -->
+            <td>
+                @Html.DisplayFor(modelItem => item.WeekDay.Day)
+            </td>
+            <!--
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.CustomerId)
+            </td>
+            -->
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.WeeklyPickupId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.WeeklyPickupId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
