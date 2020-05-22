@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<TrashCollector.Models.SuspendPickup>
 
 @{
-    ViewData["Title"] = "Customer: Suspend Pickup";
+    ViewData["Title"] = "Customer: Suspend Pickups";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Customer Suspend Pickups</h1>
+<h1>Customer Suspended Pickups</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -53,7 +53,6 @@
             -->
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SuspendPickupId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SuspendPickupId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.SuspendPickupId">Delete</a>
             </td>
         </tr>

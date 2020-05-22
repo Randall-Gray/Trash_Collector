@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,14 @@ namespace TrashCollector.Controllers
         // GET: SuspendPickups
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SuspendPickups.Include(s => s.Customer);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var applicationDbContext = _context.SuspendPickups.Include(w => w.Customer)
+                                         .Where(c => c.Customer.IdentityUserId == userId);
+
+            // If current user doesn't have any suspended pickups, go right to Create() action.
+            if (applicationDbContext.Count() == 0)
+                return RedirectToAction(nameof(Create));
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -47,7 +55,6 @@ namespace TrashCollector.Controllers
         // GET: SuspendPickups/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
             return View();
         }
 
@@ -60,11 +67,14 @@ namespace TrashCollector.Controllers
         {
             if (ModelState.IsValid)
             {
+                Customer customer = _context.Customers
+                     .Where(c => c.IdentityUserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).SingleOrDefault();
+                suspendPickup.CustomerId = customer.CustomerId;
+
                 _context.Add(suspendPickup);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", suspendPickup.CustomerId);
             return View(suspendPickup);
         }
 
@@ -81,7 +91,6 @@ namespace TrashCollector.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", suspendPickup.CustomerId);
             return View(suspendPickup);
         }
 
@@ -101,6 +110,10 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
+                    Customer customer = _context.Customers
+                         .Where(c => c.IdentityUserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).SingleOrDefault();
+                    suspendPickup.CustomerId = customer.CustomerId;
+
                     _context.Update(suspendPickup);
                     await _context.SaveChangesAsync();
                 }
@@ -117,7 +130,6 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", suspendPickup.CustomerId);
             return View(suspendPickup);
         }
 
