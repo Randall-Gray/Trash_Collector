@@ -10,6 +10,7 @@ namespace TrashCollector.Models
 {
     public class Employee
     {
+        [Key]
         public int EmployeeId { get; set; }
 
         [Display(Name = "First Name")]

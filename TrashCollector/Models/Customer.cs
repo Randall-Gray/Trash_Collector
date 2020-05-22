@@ -12,6 +12,7 @@ namespace TrashCollector.Models
 {
     public class Customer
     {
+        [Key]
         public int CustomerId { get; set; }
 
         [Display(Name = "First Name")]

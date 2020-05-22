@@ -26,6 +26,10 @@ namespace TrashCollector.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var applicationDbContext = _context.Customers.Where(c => c.IdentityUserId == userId);
 
+            // If current user doesn't exist, go right to Create() action.
+            if (applicationDbContext.Count() == 0)
+                return RedirectToAction(nameof(Create));
+
             return View(await applicationDbContext.ToListAsync());
         }
 
