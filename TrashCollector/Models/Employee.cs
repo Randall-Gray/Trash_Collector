@@ -18,9 +18,14 @@ namespace TrashCollector.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Display(Name = "Address Line 1")]
         public string Street { get; set; }
+
         public string City { get; set; }
+
         public string State { get; set; }
+
+        [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
 
         [ForeignKey("IdentityUser")]
