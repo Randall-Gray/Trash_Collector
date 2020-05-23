@@ -10,22 +10,25 @@ using TrashCollector.Models;
 
 namespace TrashCollector.Controllers
 {
-    public class TrashPickupViewModelsController : Controller
+    public class DailyPickupsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TrashPickupViewModelsController(ApplicationDbContext context)
+        public DailyPickupsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: TrashPickupViewModels
+        // GET: DailyPickups
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TrashPickupViewModel.ToListAsync());
+            PopulateDailyPickups(DateTime Date);
+
+            var applicationDbContext = _context.DailyPickups.Include(d => d.Customer);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: TrashPickupViewModels/Details/5
+        // GET: DailyPickups/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +36,42 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var trashPickupViewModel = await _context.TrashPickupViewModel
+            var dailyPickup = await _context.DailyPickups
+                .Include(d => d.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (trashPickupViewModel == null)
+            if (dailyPickup == null)
             {
                 return NotFound();
             }
 
-            return View(trashPickupViewModel);
+            return View(dailyPickup);
         }
 
-        // GET: TrashPickupViewModels/Create
+        // GET: DailyPickups/Create
         public IActionResult Create()
         {
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
             return View();
         }
 
-        // POST: TrashPickupViewModels/Create
+        // POST: DailyPickups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] TrashPickupViewModel trashPickupViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Completed,Date,CustomerId")] DailyPickup dailyPickup)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(trashPickupViewModel);
+                _context.Add(dailyPickup);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(trashPickupViewModel);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", dailyPickup.CustomerId);
+            return View(dailyPickup);
         }
 
-        // GET: TrashPickupViewModels/Edit/5
+        // GET: DailyPickups/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +79,23 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var trashPickupViewModel = await _context.TrashPickupViewModel.FindAsync(id);
-            if (trashPickupViewModel == null)
+            var dailyPickup = await _context.DailyPickups.FindAsync(id);
+            if (dailyPickup == null)
             {
                 return NotFound();
             }
-            return View(trashPickupViewModel);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", dailyPickup.CustomerId);
+            return View(dailyPickup);
         }
 
-        // POST: TrashPickupViewModels/Edit/5
+        // POST: DailyPickups/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] TrashPickupViewModel trashPickupViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Completed,Date,CustomerId")] DailyPickup dailyPickup)
         {
-            if (id != trashPickupViewModel.Id)
+            if (id != dailyPickup.Id)
             {
                 return NotFound();
             }
@@ -97,12 +104,12 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(trashPickupViewModel);
+                    _context.Update(dailyPickup);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TrashPickupViewModelExists(trashPickupViewModel.Id))
+                    if (!DailyPickupExists(dailyPickup.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +120,11 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(trashPickupViewModel);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", dailyPickup.CustomerId);
+            return View(dailyPickup);
         }
 
-        // GET: TrashPickupViewModels/Delete/5
+        // GET: DailyPickups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +132,41 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var trashPickupViewModel = await _context.TrashPickupViewModel
+            var dailyPickup = await _context.DailyPickups
+                .Include(d => d.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (trashPickupViewModel == null)
+            if (dailyPickup == null)
             {
                 return NotFound();
             }
 
-            return View(trashPickupViewModel);
+            return View(dailyPickup);
         }
 
-        // POST: TrashPickupViewModels/Delete/5
+        // POST: DailyPickups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trashPickupViewModel = await _context.TrashPickupViewModel.FindAsync(id);
-            _context.TrashPickupViewModel.Remove(trashPickupViewModel);
+            var dailyPickup = await _context.DailyPickups.FindAsync(id);
+            _context.DailyPickups.Remove(dailyPickup);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TrashPickupViewModelExists(int id)
+        private bool DailyPickupExists(int id)
         {
-            return _context.TrashPickupViewModel.Any(e => e.Id == id);
+            return _context.DailyPickups.Any(e => e.Id == id);
+        }
+
+        private void PopulateDailyPickups(DateTime date)
+        {
+
+        }
+
+        private void ClearDailyPickups()
+        {
+
         }
     }
 }

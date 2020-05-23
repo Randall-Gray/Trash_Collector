@@ -48,15 +48,15 @@ namespace TrashCollector.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "32eb301e-e739-41be-bb0e-a04fab04300d",
-                            ConcurrencyStamp = "29320a17-f997-42cf-ad2e-bf7901877014",
+                            Id = "0ff66c4e-b070-495d-8b74-a8384caf6749",
+                            ConcurrencyStamp = "87f620f3-09c7-4d52-835b-ef88e31c0917",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "1562f762-d587-4098-ace7-788610efcb6a",
-                            ConcurrencyStamp = "7edc7a1b-2a35-4047-9baa-228b4aeb6ff9",
+                            Id = "872c7548-6a1e-4e04-9f72-5a095c38b89a",
+                            ConcurrencyStamp = "5feed976-f3e2-4e53-88a8-8012698f7d06",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -269,6 +269,29 @@ namespace TrashCollector.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("TrashCollector.Models.DailyPickup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("DailyPickups");
+                });
+
             modelBuilder.Entity("TrashCollector.Models.DatePickup", b =>
                 {
                     b.Property<int>("DatePickupId")
@@ -285,14 +308,9 @@ namespace TrashCollector.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TrashPickupViewModelId")
-                        .HasColumnType("int");
-
                     b.HasKey("DatePickupId");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("TrashPickupViewModelId");
 
                     b.ToTable("DatePickups");
                 });
@@ -351,33 +369,11 @@ namespace TrashCollector.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TrashPickupViewModelId")
-                        .HasColumnType("int");
-
                     b.HasKey("SuspendPickupId");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("TrashPickupViewModelId");
-
                     b.ToTable("SuspendPickups");
-                });
-
-            modelBuilder.Entity("TrashCollector.Models.TrashPickupViewModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("VMWeeklyPickupWeeklyPickupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VMWeeklyPickupWeeklyPickupId");
-
-                    b.ToTable("TrashPickupViewModel");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.WeekDay", b =>
@@ -520,6 +516,15 @@ namespace TrashCollector.Migrations
                         .HasForeignKey("IdentityUserId");
                 });
 
+            modelBuilder.Entity("TrashCollector.Models.DailyPickup", b =>
+                {
+                    b.HasOne("TrashCollector.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TrashCollector.Models.DatePickup", b =>
                 {
                     b.HasOne("TrashCollector.Models.Customer", "Customer")
@@ -527,10 +532,6 @@ namespace TrashCollector.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TrashCollector.Models.TrashPickupViewModel", null)
-                        .WithMany("VMDatePickups")
-                        .HasForeignKey("TrashPickupViewModelId");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.Employee", b =>
@@ -547,17 +548,6 @@ namespace TrashCollector.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TrashCollector.Models.TrashPickupViewModel", null)
-                        .WithMany("VMSuspendPickups")
-                        .HasForeignKey("TrashPickupViewModelId");
-                });
-
-            modelBuilder.Entity("TrashCollector.Models.TrashPickupViewModel", b =>
-                {
-                    b.HasOne("TrashCollector.Models.WeeklyPickup", "VMWeeklyPickup")
-                        .WithMany()
-                        .HasForeignKey("VMWeeklyPickupWeeklyPickupId");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.WeeklyPickup", b =>

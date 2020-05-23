@@ -24,7 +24,7 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var applicationDbContext = _context.Customers.Where(c => c.IdentityUserId == userId);
+            var applicationDbContext = _context.Employees.Where(c => c.IdentityUserId == userId);
 
             // If current user doesn't exist, go right to Create() action.
             if (applicationDbContext.Count() == 0)

@@ -217,6 +217,70 @@ namespace TrashCollector.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DailyPickups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Completed = table.Column<bool>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    CustomerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DailyPickups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DailyPickups_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DatePickups",
+                columns: table => new
+                {
+                    DatePickupId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Completed = table.Column<bool>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    CustomerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DatePickups", x => x.DatePickupId);
+                    table.ForeignKey(
+                        name: "FK_DatePickups_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SuspendPickups",
+                columns: table => new
+                {
+                    SuspendPickupId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Completed = table.Column<bool>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    CustomerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuspendPickups", x => x.SuspendPickupId);
+                    table.ForeignKey(
+                        name: "FK_SuspendPickups_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WeeklyPickups",
                 columns: table => new
                 {
@@ -243,89 +307,13 @@ namespace TrashCollector.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "TrashPickupViewModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    VMWeeklyPickupWeeklyPickupId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrashPickupViewModel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TrashPickupViewModel_WeeklyPickups_VMWeeklyPickupWeeklyPickupId",
-                        column: x => x.VMWeeklyPickupWeeklyPickupId,
-                        principalTable: "WeeklyPickups",
-                        principalColumn: "WeeklyPickupId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DatePickups",
-                columns: table => new
-                {
-                    DatePickupId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Completed = table.Column<bool>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: false),
-                    TrashPickupViewModelId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DatePickups", x => x.DatePickupId);
-                    table.ForeignKey(
-                        name: "FK_DatePickups_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DatePickups_TrashPickupViewModel_TrashPickupViewModelId",
-                        column: x => x.TrashPickupViewModelId,
-                        principalTable: "TrashPickupViewModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SuspendPickups",
-                columns: table => new
-                {
-                    SuspendPickupId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Completed = table.Column<bool>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: false),
-                    TrashPickupViewModelId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SuspendPickups", x => x.SuspendPickupId);
-                    table.ForeignKey(
-                        name: "FK_SuspendPickups_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SuspendPickups_TrashPickupViewModel_TrashPickupViewModelId",
-                        column: x => x.TrashPickupViewModelId,
-                        principalTable: "TrashPickupViewModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "32eb301e-e739-41be-bb0e-a04fab04300d", "29320a17-f997-42cf-ad2e-bf7901877014", "Customer", "CUSTOMER" },
-                    { "1562f762-d587-4098-ace7-788610efcb6a", "7edc7a1b-2a35-4047-9baa-228b4aeb6ff9", "Employee", "EMPLOYEE" }
+                    { "0ff66c4e-b070-495d-8b74-a8384caf6749", "87f620f3-09c7-4d52-835b-ef88e31c0917", "Customer", "CUSTOMER" },
+                    { "872c7548-6a1e-4e04-9f72-5a095c38b89a", "5feed976-f3e2-4e53-88a8-8012698f7d06", "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(
@@ -388,14 +376,14 @@ namespace TrashCollector.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DatePickups_CustomerId",
-                table: "DatePickups",
+                name: "IX_DailyPickups_CustomerId",
+                table: "DailyPickups",
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DatePickups_TrashPickupViewModelId",
+                name: "IX_DatePickups_CustomerId",
                 table: "DatePickups",
-                column: "TrashPickupViewModelId");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_IdentityUserId",
@@ -406,16 +394,6 @@ namespace TrashCollector.Migrations
                 name: "IX_SuspendPickups_CustomerId",
                 table: "SuspendPickups",
                 column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SuspendPickups_TrashPickupViewModelId",
-                table: "SuspendPickups",
-                column: "TrashPickupViewModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TrashPickupViewModel_VMWeeklyPickupWeeklyPickupId",
-                table: "TrashPickupViewModel",
-                column: "VMWeeklyPickupWeeklyPickupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WeeklyPickups_CustomerId",
@@ -446,6 +424,9 @@ namespace TrashCollector.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "DailyPickups");
+
+            migrationBuilder.DropTable(
                 name: "DatePickups");
 
             migrationBuilder.DropTable(
@@ -455,13 +436,10 @@ namespace TrashCollector.Migrations
                 name: "SuspendPickups");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "TrashPickupViewModel");
-
-            migrationBuilder.DropTable(
                 name: "WeeklyPickups");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Customers");
