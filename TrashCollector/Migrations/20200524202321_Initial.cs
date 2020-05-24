@@ -235,27 +235,6 @@ namespace TrashCollector.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DailyPickups",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Completed = table.Column<bool>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DailyPickups", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DailyPickups_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DatePickups",
                 columns: table => new
                 {
@@ -330,8 +309,8 @@ namespace TrashCollector.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0935d6f5-fd25-4235-af0b-2e54daf4de34", "d7bd622a-3860-4b92-b142-3e07544bed03", "Customer", "CUSTOMER" },
-                    { "1340b524-d985-4263-92d5-edc1003e5f83", "28c79a59-3667-4023-a1ab-9bc7f5fff071", "Employee", "EMPLOYEE" }
+                    { "ce40576b-29db-4db3-b130-6b5c48e5f783", "9a76d327-c7cb-4124-affe-c8ac6b5aa26d", "Customer", "CUSTOMER" },
+                    { "a54f9e2d-26cb-44aa-93c5-eafbc9fc12b6", "8bfb3c8e-4cfa-4aa6-8c7f-7c0532d3554d", "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(
@@ -394,11 +373,6 @@ namespace TrashCollector.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DailyPickups_CustomerId",
-                table: "DailyPickups",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DatePickups_CustomerId",
                 table: "DatePickups",
                 column: "CustomerId");
@@ -440,9 +414,6 @@ namespace TrashCollector.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "DailyPickups");
 
             migrationBuilder.DropTable(
                 name: "DatePickups");

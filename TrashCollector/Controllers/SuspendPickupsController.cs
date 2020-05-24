@@ -35,22 +35,22 @@ namespace TrashCollector.Controllers
         }
 
         // GET: SuspendPickups/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var suspendPickup = await _context.SuspendPickups.Include(s => s.Customer)
-                                       .FirstOrDefaultAsync(m => m.SuspendPickupId == id);
-            if (suspendPickup == null)
-            {
-                return NotFound();
-            }
+        //    var suspendPickup = await _context.SuspendPickups.Include(s => s.Customer)
+        //                               .FirstOrDefaultAsync(m => m.SuspendPickupId == id);
+        //    if (suspendPickup == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(suspendPickup);
-        }
+        //    return View(suspendPickup);
+        //}
 
         // GET: SuspendPickups/Create
         public IActionResult Create()

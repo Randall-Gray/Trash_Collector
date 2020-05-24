@@ -17,7 +17,6 @@ namespace TrashCollector.Data
         public DbSet<DatePickup> DatePickups { get; set; }
         public DbSet<SuspendPickup> SuspendPickups { get; set; }
         public DbSet<TrashPickup> TrashPickups { get; set; }
-        public DbSet<DailyPickup> DailyPickups { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

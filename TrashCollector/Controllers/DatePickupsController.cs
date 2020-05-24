@@ -35,21 +35,21 @@ namespace TrashCollector.Controllers
         }
 
         // GET: DatePickups/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var datePickup = await _context.DatePickups.Include(d => d.Customer).FirstOrDefaultAsync(m => m.DatePickupId == id);
-            if (datePickup == null)
-            {
-                return NotFound();
-            }
+        //    var datePickup = await _context.DatePickups.Include(d => d.Customer).FirstOrDefaultAsync(m => m.DatePickupId == id);
+        //    if (datePickup == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(datePickup);
-        }
+        //    return View(datePickup);
+        //}
 
         // GET: DatePickups/Create
         public IActionResult Create()

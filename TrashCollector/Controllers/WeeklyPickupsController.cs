@@ -36,22 +36,22 @@ namespace TrashCollector.Controllers
         }
 
         // GET: WeeklyPickups/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var weeklyPickup = await _context.WeeklyPickups.Include(w => w.Customer).Include(w => w.WeekDay)
-                                      .FirstOrDefaultAsync(m => m.WeeklyPickupId == id);
-            if (weeklyPickup == null)
-            {
-                return NotFound();
-            }
+        //    var weeklyPickup = await _context.WeeklyPickups.Include(w => w.Customer).Include(w => w.WeekDay)
+        //                              .FirstOrDefaultAsync(m => m.WeeklyPickupId == id);
+        //    if (weeklyPickup == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(weeklyPickup);
-        }
+        //    return View(weeklyPickup);
+        //}
 
         // GET: WeeklyPickups/Create
         public IActionResult Create()
