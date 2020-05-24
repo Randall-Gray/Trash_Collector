@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,9 @@ namespace TrashCollector.Controllers
         // GET: DailyPickups
         public async Task<IActionResult> Index()
         {
-            PopulateDailyPickups(DateTime Date);
+            DateTime Date = DateTime.Now;
+
+            PopulateDailyPickups(Date);
 
             var applicationDbContext = _context.DailyPickups.Include(d => d.Customer);
             return View(await applicationDbContext.ToListAsync());
@@ -132,9 +135,7 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var dailyPickup = await _context.DailyPickups
-                .Include(d => d.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var dailyPickup = await _context.DailyPickups.Include(d => d.Customer).FirstOrDefaultAsync(m => m.Id == id);
             if (dailyPickup == null)
             {
                 return NotFound();
@@ -161,12 +162,32 @@ namespace TrashCollector.Controllers
 
         private void PopulateDailyPickups(DateTime date)
         {
+            //ClearDailyPickups();
 
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+            var datePickups = _context.DatePickups.Include(c => c.Customer).Where(p => p.Customer.ZipCode == employee.ZipCode);
+            
+            DailyPickup dailyPickup = new DailyPickup();
+
+            foreach (var pickup in datePickups)
+            {
+                dailyPickup.CustomerId = pickup.CustomerId;
+                dailyPickup.Date = pickup.Date;
+                dailyPickup.Completed = pickup.Completed;
+                _context.DailyPickups.Add(dailyPickup);
+            }
+            _context.SaveChangesAsync();
         }
 
         private void ClearDailyPickups()
         {
+            var dailyPickups = _context.DailyPickups;
 
+            foreach (DailyPickup pickup in dailyPickups)
+                _context.DailyPickups.Remove(pickup);
+
+            _context.SaveChangesAsync();
         }
     }
 }

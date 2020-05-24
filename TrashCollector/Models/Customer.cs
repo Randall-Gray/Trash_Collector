@@ -22,7 +22,6 @@ namespace TrashCollector.Models
         public string LastName { get; set; }
 
         [Display(Name = "Address Line 1")]
-
         public string Street { get; set; }
 
         public string City { get; set; }

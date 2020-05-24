@@ -48,15 +48,15 @@ namespace TrashCollector.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0ff66c4e-b070-495d-8b74-a8384caf6749",
-                            ConcurrencyStamp = "87f620f3-09c7-4d52-835b-ef88e31c0917",
+                            Id = "0935d6f5-fd25-4235-af0b-2e54daf4de34",
+                            ConcurrencyStamp = "d7bd622a-3860-4b92-b142-3e07544bed03",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "872c7548-6a1e-4e04-9f72-5a095c38b89a",
-                            ConcurrencyStamp = "5feed976-f3e2-4e53-88a8-8012698f7d06",
+                            Id = "1340b524-d985-4263-92d5-edc1003e5f83",
+                            ConcurrencyStamp = "28c79a59-3667-4023-a1ab-9bc7f5fff071",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -374,6 +374,36 @@ namespace TrashCollector.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("SuspendPickups");
+                });
+
+            modelBuilder.Entity("TrashCollector.Models.TrashPickup", b =>
+                {
+                    b.Property<int>("TrashPickupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrashPickupId");
+
+                    b.ToTable("TrashPickups");
                 });
 
             modelBuilder.Entity("TrashCollector.Models.WeekDay", b =>

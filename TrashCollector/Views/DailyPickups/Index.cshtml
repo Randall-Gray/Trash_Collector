@@ -41,36 +41,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Completed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.ZipCode)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Completed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.ZipCode)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<div>
+    <a asp-controller="Employees" asp-action="Index">Back to Employee Home</a>
+</div>

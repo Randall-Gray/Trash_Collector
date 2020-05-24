@@ -47,6 +47,24 @@ namespace TrashCollector.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TrashPickups",
+                columns: table => new
+                {
+                    TrashPickupId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Completed = table.Column<bool>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Street = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    State = table.Column<string>(nullable: true),
+                    ZipCode = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrashPickups", x => x.TrashPickupId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WeekDays",
                 columns: table => new
                 {
@@ -312,8 +330,8 @@ namespace TrashCollector.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0ff66c4e-b070-495d-8b74-a8384caf6749", "87f620f3-09c7-4d52-835b-ef88e31c0917", "Customer", "CUSTOMER" },
-                    { "872c7548-6a1e-4e04-9f72-5a095c38b89a", "5feed976-f3e2-4e53-88a8-8012698f7d06", "Employee", "EMPLOYEE" }
+                    { "0935d6f5-fd25-4235-af0b-2e54daf4de34", "d7bd622a-3860-4b92-b142-3e07544bed03", "Customer", "CUSTOMER" },
+                    { "1340b524-d985-4263-92d5-edc1003e5f83", "28c79a59-3667-4023-a1ab-9bc7f5fff071", "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(
@@ -434,6 +452,9 @@ namespace TrashCollector.Migrations
 
             migrationBuilder.DropTable(
                 name: "SuspendPickups");
+
+            migrationBuilder.DropTable(
+                name: "TrashPickups");
 
             migrationBuilder.DropTable(
                 name: "WeeklyPickups");
