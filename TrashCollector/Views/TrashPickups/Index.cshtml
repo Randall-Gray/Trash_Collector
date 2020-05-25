@@ -8,7 +8,7 @@
 <h1>Trash Pickups</h1>
 
 <p>
-    <a asp-action="Create">Change Day</a>
+    <a asp-action="Edit">Change Day</a>
 </p>
 <table class="table">
     <thead>
@@ -35,32 +35,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Completed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.TrashPickupId">Map</a> | 
-                <a asp-action="Edit" asp-route-id="@item.TrashPickupId">Check Completed</a> 
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Completed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZipCode)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.TrashPickupId">Map</a> |
+                    <a asp-action="CheckCompleted" asp-route-id="@item.TrashPickupId">Check Completed</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div>

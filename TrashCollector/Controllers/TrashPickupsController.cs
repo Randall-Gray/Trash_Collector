@@ -16,6 +16,7 @@ namespace TrashCollector.Controllers
         private readonly ApplicationDbContext _context;
 
         private static List<TrashPickup> TrashPickups;
+        private static DateTime Date;
         private readonly int PickupFee = 10;
 
         public TrashPickupsController(ApplicationDbContext context)
@@ -24,9 +25,10 @@ namespace TrashCollector.Controllers
         }
 
         // GET: TrashPickups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            DateTime Date = DateTime.Now;
+            if (id == 1)        // From Employee Home Page
+                Date = DateTime.Now;
 
             PopulateTrashPickups(Date);
             
@@ -74,7 +76,7 @@ namespace TrashCollector.Controllers
         //}
 
         // GET: TrashPickups/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> CheckCompleted(int? id)
         {
             if (id == null)
             {
@@ -88,7 +90,6 @@ namespace TrashCollector.Controllers
                     TrashPickups[i].Completed = TrashPickups[i].Completed == false;
                     break;
                 }
-
 
             if (TrashPickups[i].DatePickupId != 0)
             {
@@ -108,7 +109,6 @@ namespace TrashCollector.Controllers
             else if (TrashPickups[i].WeeklyPickupId != 0)
             {
                 WeeklyPickup weeklyPickup = _context.WeeklyPickups.Include(c => c.Customer).Where(p => p.WeeklyPickupId == TrashPickups[i].WeeklyPickupId).SingleOrDefault();
-                weeklyPickup.Completed = weeklyPickup.Completed == false;  // toggle
                 if (weeklyPickup.Completed == true)
                 {
                     weeklyPickup.Completed = false;
@@ -122,51 +122,30 @@ namespace TrashCollector.Controllers
                 _context.Update(weeklyPickup);
             }
             await _context.SaveChangesAsync();
-            //var trashPickup = await _context.TrashPickups.FindAsync(id);
-            //if (trashPickup == null)
-            //{
-            //    return NotFound();
-            //}
-            //           return View(trashPickup);
+
             return RedirectToAction(nameof(Index), "TrashPickups");
+        }
+
+        // GET: TrashPickups/Edit/5
+        public async Task<IActionResult> Edit()     // Change Date
+        {
+            TrashPickup TempTrashPickup = new TrashPickup();
+            TempTrashPickup.Date = Date;
+            return View(TempTrashPickup);
         }
 
         // POST: TrashPickups/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("TrashPickupId,Completed,Date,Street,City,State,ZipCode")] TrashPickup trashPickup)
-        //{
-        //    if (id != trashPickup.TrashPickupId)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("TrashPickupId,Completed,Date,Street,City,State,ZipCode")] TrashPickup trashPickup)
+        {
+            Date = trashPickup.Date;
+            return RedirectToAction(nameof(Index), "TrashPickups");
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(trashPickup);
-        //          await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TrashPickupExists(trashPickup.TrashPickupId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(trashPickup);
-        //}
-
-        // GET: TrashPickups/Delete/5
+        //GET: TrashPickups/Delete/5
         //public async Task<IActionResult> Delete(int? id)
         //{
         //    if (id == null)
