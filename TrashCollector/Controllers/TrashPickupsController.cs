@@ -49,6 +49,7 @@ namespace TrashCollector.Controllers
             //    if (TrashPickups[i].TrashPickupId == id)
             //        break;
 
+            ViewBag.Message = TrashPickups[i].Street + TrashPickups[i].City + TrashPickups[i].State + TrashPickups[i].ZipCode;
             return View(TrashPickups[i]);
         }
 
