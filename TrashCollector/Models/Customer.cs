@@ -32,6 +32,7 @@ namespace TrashCollector.Models
         public int ZipCode { get; set; }
 
         [Display(Name = "Balance Owed")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public double BalanceOwed { get; set; }
 
         [ForeignKey("IdentityUser")]

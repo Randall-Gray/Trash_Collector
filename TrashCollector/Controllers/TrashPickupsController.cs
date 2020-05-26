@@ -31,7 +31,8 @@ namespace TrashCollector.Controllers
                 Date = DateTime.Now;
 
             PopulateTrashPickups(Date);
-            
+
+            ViewBag.Message = Date.ToShortDateString();
             return View(TrashPickups);
         }
 
@@ -43,14 +44,12 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var trashPickup = await _context.TrashPickups
-                .FirstOrDefaultAsync(m => m.TrashPickupId == id);
-            if (trashPickup == null)
-            {
-                return NotFound();
-            }
+            int i = id.Value;
+            //for (; i < TrashPickups.Count; i++)
+            //    if (TrashPickups[i].TrashPickupId == id)
+            //        break;
 
-            return View(trashPickup);
+            return View(TrashPickups[i]);
         }
 
         // GET: TrashPickups/Create
@@ -83,13 +82,14 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            int i = 0;
-            for (; i < TrashPickups.Count; i++)
-                if (TrashPickups[i].TrashPickupId == id)
-                {
-                    TrashPickups[i].Completed = TrashPickups[i].Completed == false;
-                    break;
-                }
+            int i = id.Value;
+            //int i = 0;
+            //for (; i < TrashPickups.Count; i++)
+            //    if (TrashPickups[i].TrashPickupId == id)
+            //    {
+            //        TrashPickups[i].Completed = TrashPickups[i].Completed == false;
+            //        break;
+            //    }
 
             if (TrashPickups[i].DatePickupId != 0)
             {
@@ -190,31 +190,32 @@ namespace TrashCollector.Controllers
                               .Where(p => p.Customer.ZipCode == employee.ZipCode && p.Date.Year == date.Year && p.Date.DayOfYear == date.DayOfYear);
             var weeklyPickups = _context.WeeklyPickups.Include(c => c.Customer).Include(w => w.WeekDay)
                                 .Where(p => p.Customer.ZipCode == employee.ZipCode && p.WeekDay.Day == date.DayOfWeek.ToString());
-            var suspendedPickups = _context.SuspendPickups.Include(c => c.Customer);
+            //var suspendedPickups = _context.SuspendPickups.Include(c => c.Customer);
 
             TrashPickup trashPickup;
-            bool pickupSuspended;
-            DateTime DateStart, DateEnd;
+            //bool pickupSuspended;
+            //DateTime DateStart, DateEnd;
 
             foreach (var pickup in datePickups)
             {
-                pickupSuspended = false;
-                foreach(var suspension in suspendedPickups)
-                {
-                    if (suspension.CustomerId == pickup.CustomerId)
-                    {
-                        DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
-                        DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
+                //pickupSuspended = false;
+                //foreach(var suspension in suspendedPickups)
+                //{
+                //    if (suspension.CustomerId == pickup.CustomerId)
+                //    {
+                //        DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
+                //        DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
 
-                        if (pickup.Date >= DateStart && pickup.Date <= DateEnd)
-                        {
-                            pickupSuspended = true;
-                            break;
-                        }
-                    }
-                }
+                //        if (pickup.Date.Date >= DateStart.Date && pickup.Date.Date <= DateEnd.Date)  // TimeStamp won't mess up comparison.
+                //        {
+                //            pickupSuspended = true;
+                //            break;
+                //        }
+                //    }
+                //}
 
-                if (!pickupSuspended)
+                //if (!pickupSuspended)
+                if (!PickupSuspended(pickup.CustomerId, pickup.Date))
                 {
                     trashPickup = new TrashPickup();
 
@@ -232,23 +233,24 @@ namespace TrashCollector.Controllers
 
             foreach (var pickup in weeklyPickups)
             {
-                pickupSuspended = false;
-                foreach (var suspension in suspendedPickups)
-                {
-                    if (suspension.CustomerId == pickup.CustomerId)
-                    {
-                        DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
-                        DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
+                //pickupSuspended = false;
+                //foreach (var suspension in suspendedPickups)
+                //{
+                //    if (suspension.CustomerId == pickup.CustomerId)
+                //    {
+                //        DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
+                //        DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
 
-                        if (date >= DateStart && date <= DateEnd)
-                        {
-                            pickupSuspended = true;
-                            break;
-                        }
-                    }
-                }
+                //        if (date.Date >= DateStart.Date && date.Date <= DateEnd.Date) // TimeStamp won't mess up comparison.
+                //        {
+                //            pickupSuspended = true;
+                //            break;
+                //        }
+                //    }
+                //}
 
-                if (!pickupSuspended)
+                //if (!pickupSuspended)
+                if (!PickupSuspended(pickup.CustomerId, date))
                 {
                     trashPickup = new TrashPickup();
 
@@ -264,5 +266,31 @@ namespace TrashCollector.Controllers
                 }
             }
         }
+
+        private bool PickupSuspended(int CustomerId, DateTime PickupDate)
+        {
+            DateTime DateStart, DateEnd;
+            bool pickupSuspended = false;
+            var suspendedPickups = _context.SuspendPickups.Include(c => c.Customer);
+
+            foreach (var suspension in suspendedPickups)
+            {
+                if (suspension.CustomerId == CustomerId)
+                {
+                    DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
+                    DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
+
+                    if (PickupDate.Date >= DateStart.Date && PickupDate.Date <= DateEnd.Date)  // TimeStamp won't mess up comparison.
+                    {
+                        pickupSuspended = true;
+                        break;
+                    }
+                }
+            }
+
+            return pickupSuspended;
+        }
     }
 }
+
+

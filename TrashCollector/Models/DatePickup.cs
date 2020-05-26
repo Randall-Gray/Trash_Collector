@@ -15,6 +15,7 @@ namespace TrashCollector.Models
         public bool Completed { get; set; }
 
         [Display(Name = "Trash Pickup Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime Date { get; set; }
 
         [ForeignKey("Customer")]

@@ -15,9 +15,11 @@ namespace TrashCollector.Models
         public bool Completed { get; set; }
 
         [Display(Name = "Suspend Pickup Start Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "Suspend Pickup End Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime EndDate { get; set; }
 
         [ForeignKey("Customer")]

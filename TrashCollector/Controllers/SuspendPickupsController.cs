@@ -27,9 +27,9 @@ namespace TrashCollector.Controllers
             var applicationDbContext = _context.SuspendPickups.Include(w => w.Customer)
                                          .Where(c => c.Customer.IdentityUserId == userId);
 
-            // If current user doesn't have any suspended pickups, go right to Create() action.
-            if (applicationDbContext.Count() == 0)
-                return RedirectToAction(nameof(Create));
+            //// If current user doesn't have any suspended pickups, go right to Create() action.
+            //if (applicationDbContext.Count() == 0)
+            //    return RedirectToAction(nameof(Create));
 
             return View(await applicationDbContext.ToListAsync());
         }
