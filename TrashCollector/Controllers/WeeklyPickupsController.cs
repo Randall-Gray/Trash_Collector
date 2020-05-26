@@ -28,9 +28,9 @@ namespace TrashCollector.Controllers
             var applicationDbContext = _context.WeeklyPickups.Include(w => w.Customer).Include(w => w.WeekDay)
                                          .Where(c => c.Customer.IdentityUserId == userId);
 
-            //// If current user doesn't have a weekly pickup, go right to Create() action.
-            //if (applicationDbContext.Count() == 0)
-            //    return RedirectToAction(nameof(Create));
+            // If current user doesn't have a weekly pickup, go right to Create() action.
+            if (applicationDbContext.Count() == 0)
+                return RedirectToAction(nameof(Create));
 
             return View(await applicationDbContext.ToListAsync());
         }
