@@ -27,7 +27,7 @@ namespace TrashCollector.Controllers
         // GET: TrashPickups
         public async Task<IActionResult> Index(int? id)
         {
-            if (id == 1)        // From Employee Home Page
+            if (id == 1)        // Called from Employee Home Page
                 Date = DateTime.Now;
 
             PopulateTrashPickups(Date);
@@ -36,7 +36,8 @@ namespace TrashCollector.Controllers
             return View(TrashPickups);
         }
 
-        // GET: TrashPickups/Details/5
+        // GET: TrashPickups/Details
+        // Accessed from the Map button: Displays map corresponding to id.
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,37 +46,12 @@ namespace TrashCollector.Controllers
             }
 
             int i = id.Value;
-            //for (; i < TrashPickups.Count; i++)
-            //    if (TrashPickups[i].TrashPickupId == id)
-            //        break;
 
             ViewBag.Message = TrashPickups[i].Street + TrashPickups[i].City + TrashPickups[i].State + TrashPickups[i].ZipCode;
             return View(TrashPickups[i]);
         }
 
-        // GET: TrashPickups/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        // POST: TrashPickups/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("TrashPickupId,Completed,Date,Street,City,State,ZipCode")] TrashPickup trashPickup)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(trashPickup);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(trashPickup);
-        //}
-
-        // GET: TrashPickups/Edit/5
+        // GET: TrashPickups/Check or uncheck if pickup is completed
         public async Task<IActionResult> CheckCompleted(int? id)
         {
             if (id == null)
@@ -84,15 +60,8 @@ namespace TrashCollector.Controllers
             }
 
             int i = id.Value;
-            //int i = 0;
-            //for (; i < TrashPickups.Count; i++)
-            //    if (TrashPickups[i].TrashPickupId == id)
-            //    {
-            //        TrashPickups[i].Completed = TrashPickups[i].Completed == false;
-            //        break;
-            //    }
 
-            if (TrashPickups[i].DatePickupId != 0)
+            if (TrashPickups[i].DatePickupId != 0)      // if a one-time pickup
             {
                 var datePickup = _context.DatePickups.Include(c => c.Customer).Where(p => p.DatePickupId == TrashPickups[i].DatePickupId).SingleOrDefault();
                 if (datePickup.Completed == true)
@@ -107,7 +76,7 @@ namespace TrashCollector.Controllers
                 }
                 _context.Update(datePickup);
             }
-            else if (TrashPickups[i].WeeklyPickupId != 0)
+            else if (TrashPickups[i].WeeklyPickupId != 0)   // weekly pickup
             {
                 WeeklyPickup weeklyPickup = _context.WeeklyPickups.Include(c => c.Customer).Where(p => p.WeeklyPickupId == TrashPickups[i].WeeklyPickupId).SingleOrDefault();
                 if (weeklyPickup.Completed == true)
@@ -127,15 +96,15 @@ namespace TrashCollector.Controllers
             return RedirectToAction(nameof(Index), "TrashPickups");
         }
 
-        // GET: TrashPickups/Edit/5
-        public async Task<IActionResult> Edit()     // Change Date
+        // GET: TrashPickups/Edit(view): Change Day for pickup list.
+        public async Task<IActionResult> Edit()
         {
             TrashPickup TempTrashPickup = new TrashPickup();
             TempTrashPickup.Date = Date;
             return View(TempTrashPickup);
         }
 
-        // POST: TrashPickups/Edit/5
+        // POST: TrashPickups/Edit(view): Change Day for pickup list.
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -146,40 +115,12 @@ namespace TrashCollector.Controllers
             return RedirectToAction(nameof(Index), "TrashPickups");
         }
 
-        //GET: TrashPickups/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var trashPickup = await _context.TrashPickups
-        //        .FirstOrDefaultAsync(m => m.TrashPickupId == id);
-        //    if (trashPickup == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(trashPickup);
-        //}
-
-        // POST: TrashPickups/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var trashPickup = await _context.TrashPickups.FindAsync(id);
-        //    _context.TrashPickups.Remove(trashPickup);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
         private bool TrashPickupExists(int id)
         {
             return _context.TrashPickups.Any(e => e.TrashPickupId == id);
         }
 
+        // Get all the trashpickups filtered by Suspended pickups for the given day.
         private void PopulateTrashPickups(DateTime date)
         {
             TrashPickups = new List<TrashPickup>();
@@ -191,31 +132,11 @@ namespace TrashCollector.Controllers
                               .Where(p => p.Customer.ZipCode == employee.ZipCode && p.Date.Year == date.Year && p.Date.DayOfYear == date.DayOfYear);
             var weeklyPickups = _context.WeeklyPickups.Include(c => c.Customer).Include(w => w.WeekDay)
                                 .Where(p => p.Customer.ZipCode == employee.ZipCode && p.WeekDay.Day == date.DayOfWeek.ToString());
-            //var suspendedPickups = _context.SuspendPickups.Include(c => c.Customer);
 
             TrashPickup trashPickup;
-            //bool pickupSuspended;
-            //DateTime DateStart, DateEnd;
 
-            foreach (var pickup in datePickups)
+            foreach (var pickup in datePickups)         // Check one-time pickups: filtered on suspended pickups.
             {
-                //pickupSuspended = false;
-                //foreach(var suspension in suspendedPickups)
-                //{
-                //    if (suspension.CustomerId == pickup.CustomerId)
-                //    {
-                //        DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
-                //        DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
-
-                //        if (pickup.Date.Date >= DateStart.Date && pickup.Date.Date <= DateEnd.Date)  // TimeStamp won't mess up comparison.
-                //        {
-                //            pickupSuspended = true;
-                //            break;
-                //        }
-                //    }
-                //}
-
-                //if (!pickupSuspended)
                 if (!PickupSuspended(pickup.CustomerId, pickup.Date))
                 {
                     trashPickup = new TrashPickup();
@@ -232,25 +153,8 @@ namespace TrashCollector.Controllers
                 }
             }
 
-            foreach (var pickup in weeklyPickups)
+            foreach (var pickup in weeklyPickups)       // Check weekly pickup: filtered on suspended pickups.
             {
-                //pickupSuspended = false;
-                //foreach (var suspension in suspendedPickups)
-                //{
-                //    if (suspension.CustomerId == pickup.CustomerId)
-                //    {
-                //        DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
-                //        DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
-
-                //        if (date.Date >= DateStart.Date && date.Date <= DateEnd.Date) // TimeStamp won't mess up comparison.
-                //        {
-                //            pickupSuspended = true;
-                //            break;
-                //        }
-                //    }
-                //}
-
-                //if (!pickupSuspended)
                 if (!PickupSuspended(pickup.CustomerId, date))
                 {
                     trashPickup = new TrashPickup();
@@ -268,6 +172,7 @@ namespace TrashCollector.Controllers
             }
         }
 
+        // Check if passed in date is suspended for the passed in customer.
         private bool PickupSuspended(int CustomerId, DateTime PickupDate)
         {
             DateTime DateStart, DateEnd;
@@ -278,6 +183,7 @@ namespace TrashCollector.Controllers
             {
                 if (suspension.CustomerId == CustomerId)
                 {
+                    // In case start date is earlier than end date.
                     DateStart = suspension.StartDate <= suspension.EndDate ? suspension.StartDate : suspension.EndDate;
                     DateEnd = suspension.StartDate > suspension.EndDate ? suspension.StartDate : suspension.EndDate;
 

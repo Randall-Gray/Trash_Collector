@@ -13,24 +13,15 @@
     function myMap() {
         var mapProp =
         {
-            //center: new google.maps.LatLng(43.1633303, -88.0396987),
             zoom: 13,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
         var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
-        //var marker = new google.maps.Marker({ position: myCenter });
-
         var geocoder = new google.maps.Geocoder();
 
         geocodeAddress(geocoder, map);
-        //marker.setMap(map);
-
-        //google.maps.event.addListener(marker, 'click', function () {
-        //    map.setZoom(9);
-        //    map.setCenter(marker.getPosition());
-        //});
     }
 
     function geocodeAddress(geocoder, resultsMap)
@@ -50,9 +41,7 @@
             })
     }
 </script>
-<!--
-<script src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBXpiwMal6AGdjGuWF_DgVkrZnLAg-0fu0"></script>
--->
+
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXpiwMal6AGdjGuWF_DgVkrZnLAg-0fu0&callback=myMap"
         type="text/javascript"></script>
 
@@ -60,54 +49,5 @@
     <br />
     <a asp-action="Index">Back to Trash Pickups</a>
 </div>
-</html>
-<!--
-<h1>Details</h1>
 
-<div>
-    <h4>TrashPickup</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Completed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Completed)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Street)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Street)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.State)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ZipCode)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ZipCode)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TrashPickupId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
--->
+

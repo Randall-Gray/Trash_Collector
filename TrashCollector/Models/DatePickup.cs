@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TrashCollector.Models
 {
-    public class DatePickup
+    public class DatePickup     // One-time pickup
     {
         [Key]
         public int DatePickupId { get; set; }

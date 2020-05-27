@@ -51,6 +51,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers/Create
+        // Only called once from customer index if customer doesn't exist.
         public IActionResult Create()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -58,7 +59,6 @@ namespace TrashCollector.Controllers
 
             if (Customer == null)
             {
-                //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
                 return View();
             }
             else
@@ -80,7 +80,6 @@ namespace TrashCollector.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 
@@ -97,7 +96,6 @@ namespace TrashCollector.Controllers
             {
                 return NotFound();
             }
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 
@@ -135,7 +133,6 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 

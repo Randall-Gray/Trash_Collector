@@ -51,6 +51,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Employees/Create
+        // Only called once from employee index if employee doesn't exist.
         public IActionResult Create()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -58,7 +59,6 @@ namespace TrashCollector.Controllers
 
             if (Employee == null)
             {
-                //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
                 return View();
             }
             else
@@ -80,11 +80,10 @@ namespace TrashCollector.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
             return View(employee);
         }
 
-        // GET: Employees/Edit/5
+        // GET: Employees/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -97,11 +96,10 @@ namespace TrashCollector.Controllers
             {
                 return NotFound();
             }
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
             return View(employee);
         }
 
-        // POST: Employees/Edit/5
+        // POST: Employees/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -135,11 +133,10 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
             return View(employee);
         }
 
-        // GET: Employees/Delete/5
+        // GET: Employees/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,7 +154,7 @@ namespace TrashCollector.Controllers
             return View(employee);
         }
 
-        // POST: Employees/Delete/5
+        // POST: Employees/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

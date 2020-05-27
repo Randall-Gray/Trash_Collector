@@ -34,14 +34,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.ZipCode)
             </th>
-            <!--
-            <th>
-                @Html.DisplayNameFor(model => model.BalanceOwed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUser)
-            </th>
-            -->
             <th></th>
         </tr>
     </thead>
@@ -66,14 +58,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ZipCode)
             </td>
-            <!--
-            <td>
-                @Html.DisplayFor(modelItem => item.BalanceOwed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            -->
         <td>
             <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
             <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |

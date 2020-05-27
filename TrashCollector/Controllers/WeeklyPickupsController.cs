@@ -35,25 +35,8 @@ namespace TrashCollector.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: WeeklyPickups/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var weeklyPickup = await _context.WeeklyPickups.Include(w => w.Customer).Include(w => w.WeekDay)
-        //                              .FirstOrDefaultAsync(m => m.WeeklyPickupId == id);
-        //    if (weeklyPickup == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(weeklyPickup);
-        //}
-
         // GET: WeeklyPickups/Create
+        // Only called once from customer index if customer doesn't have a weekly pickup.
         public IActionResult Create()
         {
             ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "WeekDayId", "Day");
@@ -82,7 +65,7 @@ namespace TrashCollector.Controllers
             return View(weeklyPickup);
         }
 
-        // GET: WeeklyPickups/Edit/5
+        // GET: WeeklyPickups/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -99,7 +82,7 @@ namespace TrashCollector.Controllers
             return View(weeklyPickup);
         }
 
-        // POST: WeeklyPickups/Edit/5
+        // POST: WeeklyPickups/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -139,7 +122,7 @@ namespace TrashCollector.Controllers
             return View(weeklyPickup);
         }
 
-        // GET: WeeklyPickups/Delete/5
+        // GET: WeeklyPickups/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,7 +140,7 @@ namespace TrashCollector.Controllers
             return View(weeklyPickup);
         }
 
-        // POST: WeeklyPickups/Delete/5
+        // POST: WeeklyPickups/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
