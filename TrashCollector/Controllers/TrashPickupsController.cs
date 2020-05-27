@@ -51,6 +51,29 @@ namespace TrashCollector.Controllers
             return View(TrashPickups[i]);
         }
 
+        // GET: TrashPickups/MapAll
+        // Accessed from the Map All button: Displays map corresponding to all pickups for the day.
+        public async Task<IActionResult> MapAll()
+        {
+            if (TrashPickups.Count == 0)
+                return RedirectToAction(nameof(Index), "TrashPickups");
+
+            string addresses = "";
+            string tempStr;
+
+            for(int i = 0; i < TrashPickups.Count; i++)
+            {
+                tempStr = TrashPickups[i].Street + " " + TrashPickups[i].City + " " + TrashPickups[i].State + " " + TrashPickups[i].ZipCode + ";";
+
+                if (!addresses.Contains(tempStr))       // Don't add duplicate addresses.
+                    addresses += tempStr;
+            }
+
+            ViewBag.Message = addresses;
+            return View(nameof(Details), TrashPickups[0]);
+        }
+
+
         // GET: TrashPickups/Check or uncheck if pickup is completed
         public async Task<IActionResult> CheckCompleted(int? id)
         {
